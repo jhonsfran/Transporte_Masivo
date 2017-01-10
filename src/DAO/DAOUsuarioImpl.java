@@ -11,8 +11,6 @@ import Mapeo.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -179,51 +177,19 @@ public class DAOUsuarioImpl extends Conexion implements DAOusuario {
 
     }
     
-    public boolean existePqrs(int ticket){
-        
-        String query = "SELECT * FROM pqrs WHERE pqrs_ticket = '" + ticket + "'";
-        boolean validar = false;
-
-        try {
-            this.conectar();
-            PreparedStatement st = this.conexion.prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                validar = true;
-            } else {
-                validar = false;
-            }
-
-            rs.close();
-            st.close();
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            this.cerrar();
-        }
-
-        return validar;
-        
-    }
-    
-    public String registrarPQRS(String usuario_id, int motivo, String descrip, int estacion) throws Exception {
+    public String registrarPQRS(String usuario_id, String motivo, String descrip, int estacion) throws Exception {
 
         String mensaje = "";
-       
+
         if (!this.existe(usuario_id)) {
             mensaje = "Falló insersión. El usuario que intenta insertar no existe";
         } else {
             try {
-                DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                String today = df.format(new java.util.Date());
-                
                 this.conectar();
                 Statement st = this.conexion.createStatement();
                 st.executeUpdate("INSERT INTO pqrs (pqrs_motivo,pqrs_descrip,pqrs_fecha_inicio,pqrs_estado"
-                        + ",pqrs_usuario,pqrs_estacion) "
-                        + "VALUES ('" + motivo + "','" + descrip + "','" + today + "', 'INICIADO' , '" + usuario_id + "' , '" + estacion + "' )");
+                        + ",pqrs_usuario,pqrs_estacion,pqrs_resuelta_por,pqrs_fecha_resuelta,pqrs_respuesta) "
+                        + "VALUES ('" + motivo + "','" + descrip + ",'" + new java.util.Date() + "', 'INICIADO' , '" + usuario_id + "' , '" + estacion + "' )");
                 st.close();
 
             } catch (Exception e) {
@@ -232,7 +198,7 @@ public class DAOUsuarioImpl extends Conexion implements DAOusuario {
                 this.cerrar();
             }
 
-            mensaje = "Insersión exitosa";
+            mensaje = "Insersion exitosa";
         }
 
         return mensaje;
@@ -244,7 +210,7 @@ public class DAOUsuarioImpl extends Conexion implements DAOusuario {
 
         String sql_buscar = "SELECT * FROM tipo_motivo";
 
-        List<String> motivosPqrs = new ArrayList<String>();
+        List<String> estaciones = new ArrayList<String>();
 
         try {
             this.conectar();
@@ -259,7 +225,7 @@ public class DAOUsuarioImpl extends Conexion implements DAOusuario {
                     //System.out.println(rs.getString("empleado_id"));
 
                     retun_data = rs.getString("tpmotivo_id") + "-" + rs.getString("tpmotivo_nombre");
-                    motivosPqrs.add(retun_data);
+                    estaciones.add(retun_data);
                 }
             }
 
@@ -275,100 +241,8 @@ public class DAOUsuarioImpl extends Conexion implements DAOusuario {
         /*if(empleados.isEmpty()){
             empleados.add("No hay ningún " + nombre + "");//seteo la posicion cero por si no hay datos
         }*/
-        return motivosPqrs;
-    }
-    
-    public String consultarPqrs(int ticket) throws Exception{
-        
-        String return_data = "";
-        String sql_buscar = "SELECT * FROM pqrs "
-                + "WHERE pqrs_ticket = '" + ticket +"'";
-        
-        try {
-            this.conectar();
-            PreparedStatement st = this.conexion.prepareStatement(sql_buscar);
-            ResultSet rs = st.executeQuery();
-
-            //System.out.println(sql_buscar);
-            if (rs != null) {
-
-                while (rs.next()) {
-
-                    if(rs.getString("pqrs_estado").equals("RESPONDIDO")) {
-                    
-                        String nombre_encargado = "SELECT empleado_nombre FROM empleado"
-                                + "WHERE empleado_id = '"+ rs.getString("pqrs_resuelta_por") +"'";
-                        
-                        PreparedStatement st2 = this.conexion.prepareStatement(nombre_encargado);
-                        ResultSet rs2 = st2.executeQuery();
-                        
-                        return_data = "Ticket: "+ rs.getString("pqrs_ticket") + "\nMotivo: "+ rs.getString("pqrs_motivo")
-                            + "\nDescripción: "+ rs.getString("pqrs_descrip") + "\nFecha inicio: " + rs.getString("pqrs_fecha_inicio")
-                            + "\nEstado: "+ rs.getString("pqrs_estado") + "\nEstación: "+ rs.getString("pqrs_estacion")
-                            + "\nEncargado: "+rs2.getString("empleado_nombre") + "\nFecha Respuesta : "+rs.getString("pqrs_fecha_resuelta")
-                            + "\nRespuesta: "+rs.getString("pqrs_respuesta")
-                            + listarMedidasPqrs(ticket);
-                    }
-                    else {
-                        
-                        return_data = "Ticket: "+ rs.getString("pqrs_ticket") + "\nMotivo: "+ rs.getString("pqrs_motivo")
-                            + "\nDescripción: "+ rs.getString("pqrs_descrip") + "\nFecha inicio: " + rs.getString("pqrs_fecha_inicio")
-                            + "\nEstado: "+ rs.getString("pqrs_estado") + "\nEstación: "+ rs.getString("pqrs_estacion")
-                            + "\nEncargado: Esperando respuesta" + "\nFecha Respuesta: Esperando respuesta"
-                            + "\nRespuesta: Esperando respuesta";
-                        
-                    }
-                }
-            }
-
-            rs.close();
-            st.close();
-
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            this.cerrar();
-        }
-        
-        return return_data;
-        
+        return estaciones;
     }
 
-    public String listarMedidasPqrs(int ticket) {
-        
-       String return_data = "\n\n Medidas: ";
-
-        String sql_buscar = "SELECT * FROM pqrs_medida";
-
-        List<String> motivosPqrs = new ArrayList<String>();
-
-        try {
-            this.conectar();
-            PreparedStatement st = this.conexion.prepareStatement(sql_buscar);
-            ResultSet rs = st.executeQuery();
-
-            //System.out.println(sql_buscar);
-            if (rs != null) {
-
-                while (rs.next()) {
-
-                    return_data = "\n\n * " +rs.getString("pqrs_medida_descrip")
-                            + "\nEstado: " + rs.getString("pqrs_medida_estado");
-                    motivosPqrs.add(return_data);
-                }
-            }
-
-            rs.close();
-            st.close();
-
-        } catch (Exception e) {
-            return_data = "Error al consultar medidas tomadas";
-        } finally {
-            this.cerrar();
-        }
-        
-        return return_data;
-    }
-    
 }
 
