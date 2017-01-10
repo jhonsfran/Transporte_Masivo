@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1e8d561f-4a96-463d-808e-087675548c84">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     tarjeta."tarjeta_pin" AS tarjeta_tarjeta_pin,
+     tarjeta."tarjeta_saldo" AS tarjeta_tarjeta_saldo,
+     tarjeta."tarjeta_estado" AS tarjeta_tarjeta_estado,
+     usuario."usuario_id" AS usuario_usuario_id,
+     usuario."usuario_nombre" AS usuario_usuario_nombre,
+     usuario."usuario_telefono" AS usuario_usuario_telefono
+FROM
+     "public"."usuario" usuario INNER JOIN "public"."tarjeta" tarjeta ON usuario."usuario_id" = tarjeta."tarjeta_usuario" ORDER BY tarjeta_pin]]>
+	</queryString>
+	<field name="tarjeta_tarjeta_pin" class="java.lang.Integer"/>
+	<field name="tarjeta_tarjeta_saldo" class="java.lang.String"/>
+	<field name="tarjeta_tarjeta_estado" class="java.lang.Boolean"/>
+	<field name="usuario_usuario_id" class="java.lang.String"/>
+	<field name="usuario_usuario_nombre" class="java.lang.String"/>
+	<field name="usuario_usuario_telefono" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="555" height="33" uuid="d23685d7-3e00-4f07-9d22-ed1a2187b9ed"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Transporte Masivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="0" y="46" width="274" height="22" uuid="2e1bd723-7885-4c04-a40c-167393591724"/>
+				<text><![CDATA[Tarjeta - Usuarios]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="76108203-9612-4b4b-8166-f93cc0e048ed"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="66" height="15" uuid="dbb8dc72-1c5e-4dfc-b8d0-d6408083719c"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[PIN Tarjeta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="66" y="19" width="80" height="15" uuid="8e23c812-4eab-445b-8257-392b46ff679f"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Saldo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="146" y="19" width="79" height="15" uuid="e680d047-a81d-4458-9774-c51b4f8a986e"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="225" y="19" width="92" height="15" uuid="13249e5b-c366-4f4d-8345-0f789055fa1d"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Id. Usuario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="317" y="19" width="143" height="15" uuid="e9b98dfd-940c-40ad-bb47-0d695294c143"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="460" y="19" width="92" height="15" uuid="e9a2ee6e-f87c-406c-a099-4424bf61decb"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Telefono]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="c60dd374-6d88-4145-b735-3ea6f23741a3"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="66" height="15" uuid="c8cef8b3-6046-4903-9dbd-3e5a7dfb24ed"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tarjeta_tarjeta_pin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="66" y="0" width="80" height="15" uuid="6c1d92cf-9909-4a1f-8f5b-9edaa640c417"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tarjeta_tarjeta_saldo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="146" y="0" width="79" height="15" uuid="7fb013a5-7f0c-4162-bbe2-649a54804793"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[( $F{tarjeta_tarjeta_estado} ? "Activa" : "Desactivada" )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="225" y="0" width="92" height="15" uuid="7899e6d2-d8aa-4594-b65e-928813521102"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{usuario_usuario_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="317" y="0" width="143" height="15" uuid="0b1868f9-921f-4796-b89c-dad05453d1a4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{usuario_usuario_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="460" y="0" width="92" height="15" uuid="52716cbb-f11d-4829-a125-73ca3f51eae5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{usuario_usuario_telefono}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="530acae1-9f84-4b0a-8059-35b837bd39db"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="2a3f91c9-1d41-46a8-aad5-c7fc12e3fa42"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="4c9f5aff-2aca-4fd0-91b6-ea5bb30e0b22"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="4163ceaa-b12f-48df-99bd-4761b4fc621a"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

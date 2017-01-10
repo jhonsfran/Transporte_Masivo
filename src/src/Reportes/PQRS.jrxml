@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5190c56d-52c8-416f-a0c9-b9f8ae290a28">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="fecha1" class="java.util.Date"/>
+	<parameter name="fecha2" class="java.util.Date"/>
+	<parameter name="estacion_sql" class="java.lang.String"/>
+	<parameter name="estacion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     pqrs."pqrs_ticket" AS ticket,
+	pqrs_motivo AS motivo,
+     pqrs."pqrs_descrip" AS descripcion,
+     pqrs."pqrs_estado" AS estado,
+    	usuario_nombre AS usuario,
+     	estacion_nombre AS estacion,
+	pqrs_fecha_inicio AS fecha_inicio,
+	pqrs_resuelta_por AS responsable,
+	pqrs_fecha_resuelta AS fecha_resuelta
+FROM
+     pqrs INNER JOIN estacion ON pqrs_estacion = estacion_id
+	INNER JOIN usuario ON pqrs_usuario = usuario_id
+WHERE pqrs_fecha_inicio BETWEEN $P{fecha1} AND $P{fecha2}
+	$P!{estacion_sql}]]>
+	</queryString>
+	<field name="ticket" class="java.lang.Integer"/>
+	<field name="motivo" class="java.lang.Integer"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="estacion" class="java.lang.String"/>
+	<field name="fecha_inicio" class="java.sql.Date"/>
+	<field name="responsable" class="java.lang.String"/>
+	<field name="fecha_resuelta" class="java.sql.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="94" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="68b7e78c-3be4-4617-9f42-27c704fbdf69"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Transporte Masivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="0" y="46" width="113" height="22" uuid="61badf36-a420-49a1-b937-36aecee07f5e"/>
+				<text><![CDATA[PQRS desde]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="113" y="46" width="100" height="22" uuid="9c241e0b-0db8-421c-82fa-d4c4c5455d0d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="113" y="68" width="100" height="22" uuid="5df29075-3c03-4766-9719-00f8e980bc48"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="SubTitle" x="2" y="68" width="113" height="22" uuid="240c6e23-0654-44f2-b465-2ac68b6dc816"/>
+				<text><![CDATA[hasta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="278" y="46" width="85" height="22" uuid="14ee4c14-fe3e-4629-b146-916166168f14"/>
+				<text><![CDATA[Estación]]></text>
+			</staticText>
+			<textField pattern="">
+				<reportElement x="373" y="46" width="100" height="22" uuid="07713e11-11d0-4604-8000-eb23115b4d7b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $P{estacion}.isEmpty() ? "Todas" : $P{estacion} )]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="fb35a5fc-d6bd-4eac-aeab-ddf6291979c5"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="65" height="15" uuid="912b4eae-aca3-4ce6-8eb0-bfdb3874198e"/>
+				<text><![CDATA[Ticket #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="363" y="19" width="70" height="15" uuid="6ee89a04-663d-4d8a-ac0f-46f900335747"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="65" y="19" width="111" height="15" uuid="0d21447e-1701-4a24-bad0-0ca7e7f393dd"/>
+				<text><![CDATA[Usuario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="176" y="19" width="87" height="15" uuid="58363651-b1b5-46ac-a311-92b02ceebb85"/>
+				<text><![CDATA[Estación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="263" y="19" width="100" height="15" uuid="b79f6255-3c4b-4c28-9b4a-b59a1d915ca3"/>
+				<text><![CDATA[Fecha Inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="433" y="19" width="100" height="15" uuid="0efd4b0c-0d47-4c52-93cb-627becaa818f"/>
+				<text><![CDATA[Responsable]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="83" splitType="Stretch">
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="65" height="20" uuid="996276dc-fb03-4bb6-8d48-92a8efcd7bcb"/>
+				<textFieldExpression><![CDATA[$F{ticket}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="65" y="0" width="111" height="20" uuid="7519235c-d423-4c52-8c7d-82eba31b5ae3"/>
+				<textFieldExpression><![CDATA[$F{usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="176" y="0" width="87" height="20" uuid="44e6bdd9-d0a1-4444-8b90-6c7dc59d575f"/>
+				<textFieldExpression><![CDATA[$F{estacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="2" y="28" width="111" height="15" uuid="fb0dda1d-226f-4ebe-bc3e-5abe92dd0867"/>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="24" width="555" height="1" uuid="46478bda-4a7f-4d52-9ca1-8c1195397cf8"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="263" y="0" width="100" height="20" uuid="d188e8cd-04c3-43f3-a88c-3ab2b34c92dd"/>
+				<textFieldExpression><![CDATA[$F{fecha_inicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="363" y="0" width="70" height="20" uuid="0ed60a94-1dfa-4d2a-96dc-c32e6bd1ed2c"/>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="433" y="0" width="100" height="20" uuid="3e326d82-8a44-4778-8f0e-01b68fa20de2"/>
+				<textFieldExpression><![CDATA[( $F{responsable}.equals("null") ? $F{responsable} : "En espera" )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="113" y="28" width="442" height="41" uuid="6fdf7a98-81dc-44be-81ed-64cf8e3ce0cd"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="71" width="555" height="1" uuid="2e986750-a45f-4686-bd62-ef49a50dc6a8"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="b2394693-6c69-4af4-9ede-649a49d38137"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="62bfd00f-6370-468b-85eb-f36b8e8fae8a"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="efbd42a0-99ab-49d4-aaed-d52fc4ffb21e"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

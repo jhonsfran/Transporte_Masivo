@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17/12/2016 12:40:21 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Mapeo.Empleado" table="empleado" schema="public" optimistic-lock="version">
+        <id name="empleadoId" type="string">
+            <column name="empleado_id" length="10" />
+            <generator class="assigned" />
+        </id>
+        <property name="empleadoNombre" type="string">
+            <column name="empleado_nombre" length="50" not-null="true" />
+        </property>
+        <property name="empleadoTelefono" type="string">
+            <column name="empleado_telefono" length="20" not-null="true" />
+        </property>
+        <property name="empleadoSueldo" type="double">
+            <column name="empleado_sueldo" scale="0" not-null="true" />
+        </property>
+        <property name="empleadoRol" type="int">
+            <column name="empleado_rol" not-null="true" />
+        </property>
+        <one-to-one name="auxServCliente" class="Mapeo.AuxServCliente"></one-to-one>
+        <one-to-one name="gerente" class="Mapeo.Gerente"></one-to-one>
+        <one-to-one name="dirOperativo" class="Mapeo.DirOperativo"></one-to-one>
+        <one-to-one name="conductor" class="Mapeo.Conductor"></one-to-one>
+        <one-to-one name="administrador" class="Mapeo.Administrador"></one-to-one>
+    </class>
+</hibernate-mapping>

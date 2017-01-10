@@ -1,0 +1,42 @@
+**Modelo relacional: Transporte masivo.
+
+
+Ruta(ruta_id::PK, ruta_descrip)
+
+Estacion(estacion_id::PK, estacion_nombre::UQ, estacion_ubicacion::UQ, estacion_administrador::FK)
+
+Bus(bus_placa::PK, bus_tipo_id::FK, bus_ruta::FK)
+
+Tipo_bus(tpbus_id::PK, tpbus_nombre)
+
+Tarjeta(tarjeta_pin::PK, tarjeta_saldo, tarjeta_estado, tarjeta_usuario::FK)
+
+Usuario(usuario_id::PK, usuario_nombre, usuario_telefono)
+
+Empleado(empleado_id, empleado_nombre, empleado_telefono, empleado_sueldo)
+
+Conductor(conductor_empleado_id::PK::FK, conductor_bus::FK) ISA[Empleado]
+
+Auxiliar_serv_cliente(aux_serv_cliente_empleado_id::PK::FK, aux_serv_cliente_estacion::FK ISA[Empleado]
+
+Administrador(administrador_empleado_id::PK::FK) ISA[Empleado]
+
+Director_operativo(dir_operativo_empleado_id::PK::FK) ISA[Empleado]
+
+Gerente(gerente_empleado_id::PK::FK) ISA[Empleado]
+
+Turno(turno_id::PK, turno_dia_inicio, turno_dia_fin, turno_hora_inicio, turno_hora_fin)
+
+Turno_asignado(tasignado_turno::PK::FK, tasignado_conductor::PK::FK)
+
+Transita(transita_ruta::PK::FK, transita_estacion::PK::FK, transita_sig_estacion::PK::FK) FK[siguiente -> Estacion]
+
+Recarga(recarga_tarjeta::PK::FK, recarga_fecha_hora::PK, recarga_estacion::FK, recarga_valor)
+
+PQRS(pqrs_ticket::PK, pqrs_motivo::FK, pqrs_descrip, pqrs_fecha_inicio, pqrs_estado, pqrs_usuario::FK, pqrs_estacion::FK, pqrs_resuelta_por::FK, pqrs_fecha_resuelta, pqrs_respuesta) FK[resuelta_por -> Administrador]
+
+Tipo_motivo(tpmotivo_id::PK, tpmotivo_nombre)
+
+PQRS_medida(pqrs_medida_id::PK, pqrs_medida_ticket::PK::FK, pqrs_medida_descrip, pqrs_medida_estado)
+
+Aborda(aborda_tarjeta_pin::PK::FK, aborda_ruta::FK, aborda_fecha_hora::PK)

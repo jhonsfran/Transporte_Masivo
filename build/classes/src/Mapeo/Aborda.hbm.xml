@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17/12/2016 12:40:21 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Mapeo.Aborda" table="aborda" schema="public" optimistic-lock="version">
+        <composite-id name="id" class="Mapeo.AbordaId">
+            <key-property name="abordaTarjeta" type="int">
+                <column name="aborda_tarjeta" />
+            </key-property>
+            <key-property name="abordaFechaHora" type="timestamp">
+                <column name="aborda_fecha_hora" length="29" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="ruta" class="Mapeo.Ruta" fetch="select">
+            <column name="aborda_ruta" length="5" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tarjeta" class="Mapeo.Tarjeta" update="false" insert="false" fetch="select">
+            <column name="aborda_tarjeta" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

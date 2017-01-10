@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17/12/2016 12:40:21 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Mapeo.Estacion" table="estacion" schema="public" optimistic-lock="version">
+        <id name="estacionId" type="int">
+            <column name="estacion_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="estacionNombre" type="string">
+            <column name="estacion_nombre" length="50" not-null="true" />
+        </property>
+        <property name="estacionUbicacion" type="string">
+            <column name="estacion_ubicacion" length="50" not-null="true" />
+        </property>
+        <property name="estacionAdministrador" type="int">
+            <column name="estacion_administrador" not-null="true" />
+        </property>
+        <set name="transitasForTransitaSigEstacion" table="transita" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="transita_sig_estacion" not-null="true" />
+            </key>
+            <one-to-many class="Mapeo.Transita" />
+        </set>
+        <set name="recargas" table="recarga" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="recarga_estacion" not-null="true" />
+            </key>
+            <one-to-many class="Mapeo.Recarga" />
+        </set>
+        <set name="transitasForTransitaEstacion" table="transita" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="transita_estacion" not-null="true" />
+            </key>
+            <one-to-many class="Mapeo.Transita" />
+        </set>
+        <set name="auxServClientes" table="aux_serv_cliente" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="aux_serv_cliente_estacion" not-null="true" />
+            </key>
+            <one-to-many class="Mapeo.AuxServCliente" />
+        </set>
+        <set name="pqrses" table="pqrs" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pqrs_estacion" not-null="true" />
+            </key>
+            <one-to-many class="Mapeo.Pqrs" />
+        </set>
+    </class>
+</hibernate-mapping>
