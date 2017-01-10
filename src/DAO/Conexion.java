@@ -1,9 +1,10 @@
 package DAO;
 
-
 import java.sql.*;
-public class Conexion {
+import javax.swing.JOptionPane;
 
+
+public class Conexion {
 
     protected Connection conexion;
     private final String JDBC_DRIVER = "org.postgresql.Driver";
@@ -28,9 +29,8 @@ public class Conexion {
                 //System.out.println("Conexion Abierta :D");
                 //return conexion;
                 
-            //Crear objeto Statement para realizar queries a la base de datos
         } catch (Exception e) {
-            System.out.println("No se pudo abrir la bd. :'(");
+            JOptionPane.showMessageDialog(null, "No se pudo abrir la bd. :'(", "Información", JOptionPane.INFORMATION_MESSAGE);
             //return null;
         }
 

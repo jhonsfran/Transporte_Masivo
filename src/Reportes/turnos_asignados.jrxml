@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="152d0ac7-24c9-40ae-b3f7-e0289138fbce">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     conductor."conductor_bus" AS conductor_conductor_bus,
+     empleado."empleado_id" AS empleado_empleado_id,
+     empleado."empleado_nombre" AS empleado_empleado_nombre,
+     turno."turno_id" AS turno_turno_id,
+     turno."turno_dia_inicio" AS turno_turno_dia_inicio,
+     turno."turno_dia_fin" AS turno_turno_dia_fin,
+     turno."turno_hora_inicio" AS turno_turno_hora_inicio,
+     turno."turno_hora_fin" AS turno_turno_hora_fin
+FROM
+     "public"."empleado" empleado INNER JOIN "public"."conductor" conductor ON empleado."empleado_id" = conductor."conductor_empleado_id"
+     INNER JOIN "public"."turno_asignado" turno_asignado ON conductor."conductor_empleado_id" = turno_asignado."tasignado_conductor"
+     INNER JOIN "public"."turno" turno ON turno_asignado."tasignado_turno" = turno."turno_id" ORDER BY turno_id]]>
+	</queryString>
+	<field name="empleado_empleado_id" class="java.lang.String"/>
+	<field name="empleado_empleado_nombre" class="java.lang.String"/>
+	<field name="conductor_conductor_bus" class="java.lang.String"/>
+	<field name="turno_turno_id" class="java.lang.Integer"/>
+	<field name="turno_turno_dia_inicio" class="java.lang.String"/>
+	<field name="turno_turno_dia_fin" class="java.lang.String"/>
+	<field name="turno_turno_hora_inicio" class="java.sql.Time"/>
+	<field name="turno_turno_hora_fin" class="java.sql.Time"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="555" height="33" uuid="f0d01c53-7dc6-48bc-a405-231a3454f342"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Transporte masivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="0" y="46" width="274" height="22" uuid="65e342a5-b279-40ed-84c1-4fb646acb45b"/>
+				<text><![CDATA[Turnos asignados por conductor]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="a29b1185-5e8f-4682-9532-2439539afce4"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="69" height="15" uuid="1d493fb0-2a73-4363-85d9-5e52e2fdcd9f"/>
+				<text><![CDATA[Id. Conductor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="69" y="19" width="69" height="15" uuid="0159d6eb-c063-4022-95c5-a4e8978012e0"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="138" y="19" width="69" height="15" uuid="683815c0-f7f8-44bf-ab5a-bfa142df9ce2"/>
+				<text><![CDATA[Bus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="207" y="19" width="69" height="15" uuid="b7b73895-5415-4b48-b9b2-1c61bfafc999"/>
+				<text><![CDATA[Id. Turno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="276" y="19" width="69" height="15" uuid="530f6995-9846-47b5-87c6-c1337ad5580b"/>
+				<text><![CDATA[Dia Inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="345" y="19" width="69" height="15" uuid="daa2dbcd-2faa-4fb0-b6a0-3c3da878ad88"/>
+				<text><![CDATA[Dia Fin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="414" y="19" width="69" height="15" uuid="3a2c0fda-6388-44e2-ba14-8a068f1cfe4e"/>
+				<text><![CDATA[Hora Inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="483" y="19" width="69" height="15" uuid="7f6890de-6411-45b7-bb37-ac05e14b0876"/>
+				<text><![CDATA[Hora Fin]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="dc162b91-a19a-465a-a324-5fa8dc8b91ff"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="69" height="15" uuid="0d9f43a0-cb0b-49ff-b12a-a10dcf38fe65"/>
+				<textFieldExpression><![CDATA[$F{empleado_empleado_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="69" y="0" width="69" height="15" uuid="8074871c-4732-4eca-890e-f9685ee50b47"/>
+				<textFieldExpression><![CDATA[$F{empleado_empleado_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="138" y="0" width="69" height="15" uuid="d10e604d-de8d-4cff-a355-31bf590c7f36"/>
+				<textFieldExpression><![CDATA[$F{conductor_conductor_bus}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="207" y="0" width="69" height="15" uuid="4423a691-fc14-43fa-b4c8-91b8b94818bb"/>
+				<textFieldExpression><![CDATA[$F{turno_turno_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="276" y="0" width="69" height="15" uuid="e22856c5-4c5a-4ead-a076-553e7f4b247a"/>
+				<textFieldExpression><![CDATA[$F{turno_turno_dia_inicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="345" y="0" width="69" height="15" uuid="168a4078-89ad-484e-992c-dc49fdb99a6f"/>
+				<textFieldExpression><![CDATA[$F{turno_turno_dia_fin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="414" y="0" width="69" height="15" uuid="17dbcdab-51cb-4486-a3f0-194a547e6324"/>
+				<textFieldExpression><![CDATA[$F{turno_turno_hora_inicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="483" y="0" width="69" height="15" uuid="0ad8c550-d646-4645-8c43-6cbeffec2c1c"/>
+				<textFieldExpression><![CDATA[$F{turno_turno_hora_fin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="42d90b8e-0acd-4928-979d-82cef6269546"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="fcea326b-e0bc-4f16-97aa-3c39921c2316"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="1de2518a-a31d-4ac8-b3f3-ef2914c488cf"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="35c2b4e3-fad1-41af-b6b5-b5bb7a903c19"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -8,7 +8,6 @@ package DAO;
 import Interfaces.DAOempleado;
 import Mapeo.Administrador;
 import Mapeo.AuxServCliente;
-import Mapeo.Bus;
 import Mapeo.Conductor;
 import Mapeo.DirOperativo;
 import Mapeo.Empleado;
@@ -16,6 +15,8 @@ import Mapeo.Gerente;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -27,7 +28,8 @@ import javax.swing.JOptionPane;
 public class DAOEmpleadoImpl extends Conexion implements DAOempleado {
     
     @Override
-    public String registrar(String empleado_id, String empleado_nombre, String empleado_telefono, String empleado_sueldo, int tipo, String placa_bus, int estacion_id) throws Exception {
+    public String registrar(String empleado_id, String empleado_nombre, String empleado_telefono, String empleado_sueldo, 
+            int tipo, String placa_bus, int estacion_id) throws Exception {
 
         String mensaje = "";
         DAObusImpl mi_dao_bus = new DAObusImpl();
@@ -44,7 +46,8 @@ public class DAOEmpleadoImpl extends Conexion implements DAOempleado {
             try {
                 this.conectar();
                 Statement st = this.conexion.createStatement();
-                st.executeUpdate("INSERT INTO empleado(empleado_id,empleado_nombre,empleado_telefono,empleado_sueldo,empleado_rol) VALUES ('" + empleado_id + "' , '" + empleado_nombre + "' , '" + empleado_telefono + "' "
+                st.executeUpdate("INSERT INTO empleado(empleado_id,empleado_nombre,empleado_telefono,empleado_sueldo,empleado_rol)"
+                        + "VALUES ('" + empleado_id + "' , '" + empleado_nombre + "' , '" + empleado_telefono + "' "
                         + ", '" + empleado_sueldo + "' , '" + tipo + "' )");
                 st.executeUpdate(this.insertaTipoEmpleado(empleado_id,placa_bus,estacion_id,tipo));
                 
@@ -63,7 +66,8 @@ public class DAOEmpleadoImpl extends Conexion implements DAOempleado {
     }
 
     @Override
-    public String modificar(String empleado_id_old ,String empleado_id, String empleado_nombre, String empleado_telefono, String empleado_sueldo, int tipo, String placa_bus, int estacion_id) throws Exception {
+    public String modificar(String empleado_id_old ,String empleado_id, String empleado_nombre, String empleado_telefono,
+            String empleado_sueldo, int tipo, String placa_bus, int estacion_id) throws Exception {
 
         DAObusImpl mi_bus = new DAObusImpl();
         DAOEstacionImpl mi_estacion = new DAOEstacionImpl();
@@ -661,4 +665,208 @@ public class DAOEmpleadoImpl extends Conexion implements DAOempleado {
 
     }
 
+    public ArrayList<String> pqrsPendientes() throws Exception{
+        
+        String retun_data = "Seleccione PQRS";
+
+        String sql_buscar = "SELECT pqrs_ticket FROM pqrs WHERE pqrs_estado = 'INICIADO'";
+
+        ArrayList<String> pendientes = new ArrayList();
+        pendientes.add(retun_data);
+        
+        try {
+            this.conectar();
+            PreparedStatement st = this.conexion.prepareStatement(sql_buscar);
+            ResultSet rs = st.executeQuery();
+
+            if (rs != null) {
+
+                while (rs.next()) {
+
+                    retun_data = rs.getString("pqrs_ticket");
+                    pendientes.add(retun_data);
+                }
+            }
+
+            rs.close();
+            st.close();
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.cerrar();
+        }
+        
+        return pendientes;
+    }
+    
+    public ArrayList<String> PqrsRespondidas() throws Exception{
+        
+        String retun_data = "Seleccione PQRS";
+
+        String sql_buscar = "SELECT pqrs_ticket FROM pqrs WHERE pqrs_estado = 'RESPONDIDA'";
+
+        ArrayList<String> pendientes = new ArrayList();
+        pendientes.add(retun_data);
+        
+        try {
+            this.conectar();
+            PreparedStatement st = this.conexion.prepareStatement(sql_buscar);
+            ResultSet rs = st.executeQuery();
+
+            if (rs != null) {
+
+                while (rs.next()) {
+
+                    retun_data = rs.getString("pqrs_ticket");
+                    pendientes.add(retun_data);
+                }
+            }
+
+            rs.close();
+            st.close();
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.cerrar();
+        }
+        
+        return pendientes;
+        
+    }
+    
+    public String registrarRespuestaPqrs(int id_pqrs, String id_adm, String resp) {
+        
+        String msj = "Registro exitoso";
+        
+        try {
+                DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                String today = df.format(new java.util.Date());
+                
+                this.conectar();
+                Statement st = this.conexion.createStatement();
+                st.executeUpdate("UPDATE pqrs SET pqrs_resuelta_por = '"+ id_adm
+                        + "', pqrs_fecha_resuelta = '" + today
+                        + "', pqrs_respuesta = '"+ resp
+                        + "', pqrs_estado = 'RESPONDIDO'"
+                        + "WHERE pqrs_ticket = '"+ id_pqrs +"'");
+                st.close();
+
+            } catch (Exception e) {
+                msj = "Falló registro de respuesta";
+               
+            } finally {
+                this.cerrar();
+            }
+        return msj;
+    }
+    
+    public String agregarMedidaPqrs(int id_pqrs, String medida) {
+        
+        String msj = "Registro exitoso";
+        
+        try {   
+                this.conectar();
+                Statement st = this.conexion.createStatement();
+                st.executeUpdate("INSERT INTO pqrs_medida (pqrs_medida_ticket, pqrs_medida_descrip,"
+                        + "pqrs_medida_estado)"
+                        +"VALUES ('"+ id_pqrs +"', '"+ medida +"', INICIADO");
+                st.close();
+
+            } catch (Exception e) {
+                msj = "Falló registro de respuesta";
+            } finally {
+                this.cerrar();
+            }
+        return msj;
+        
+    }
+    
+    public ArrayList<String> consultarMedidasPqrs(int id_pqrs){
+        
+        String return_data = "";
+
+        String sql_buscar = "SELECT * FROM pqrs_medida";
+
+        ArrayList<String> medidasPqrs = new ArrayList();
+
+        try {
+            this.conectar();
+            PreparedStatement st = this.conexion.prepareStatement(sql_buscar);
+            ResultSet rs = st.executeQuery();
+
+            //System.out.println(sql_buscar);
+            if (rs != null) {
+
+                while (rs.next()) {
+
+                    return_data = rs.getString("pqrs_medida_id");
+                    medidasPqrs.add(return_data);
+                }
+            }
+
+            rs.close();
+            st.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Error al consultar las medidas","Error",JOptionPane.ERROR_MESSAGE);
+        } finally {
+            this.cerrar();
+        }
+        return medidasPqrs;
+    }
+    
+    public String consultarMedidaPqrsDescrip(int id_medida, int id_ticket){
+        
+        String return_data = "";
+        String sql_buscar = "SELECT pqrs_medida_descrip, pqrs_medida_estado FROM pqrs_medida "
+                + "WHERE id_ticket = '" + id_ticket +"' AND id_medida = '" + id_medida +"'";
+        
+        try {
+            this.conectar();
+            PreparedStatement st = this.conexion.prepareStatement(sql_buscar);
+            ResultSet rs = st.executeQuery();
+
+            //System.out.println(sql_buscar);
+            if (rs != null) {
+
+                while (rs.next()) {
+
+                    return_data = rs.getString("pqrs_medida_descrip") + "-" + rs.getString("pqrs_medida_estado");
+                }
+            }
+
+            rs.close();
+            st.close();
+
+        } catch (Exception e) {
+            return_data = "Error al consultar";
+        } finally {
+            this.cerrar();
+        }
+        
+        return return_data;
+    }
+    
+    public String medidaRealizada(int id_medida, int id_ticket){
+        
+        String msj = "Registro exitoso";
+        
+        try {
+                this.conectar();
+                Statement st = this.conexion.createStatement();
+                st.executeUpdate("UPDATE pqrs_medida SET estado = OK WHERE pqrs_medida_id = '"
+                + id_medida + "AND pqrs_medida_ticket = '" + id_ticket + "'");
+                st.close();
+
+            } catch (Exception e) {
+                msj = "Falló registro de respuesta";
+               
+            } finally {
+                this.cerrar();
+            }
+        return msj;
+    }
+  
 }
